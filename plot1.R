@@ -7,6 +7,7 @@ options(stringsAsFactors = FALSE)
 
 #Load required packages
 library(data.table)
+library(dplyr)
 
 #The data file is located in the working directory in the folder 'household_power_consumption'
 #File name is 'household_power_consumption.txt'
@@ -28,6 +29,12 @@ names(plot1.data) <- names(read.table(file.path("household_power_consumption","h
 #convert 'Date' column to Date class
 plot1.data$Date <- as.Date(plot1.data$Date,"%d/%m/%Y")
 
+#combine dates and times & add column to data set
+date.times <- with(plot1.data,
+                   strptime(paste(Date,Time),"%Y-%m-%d %H:%M:%S",tz="UTC")
+)
+
+plot1.data <- cbind(plot1.data,date.times)
 
 #check the data
 dim(plot1.data)
